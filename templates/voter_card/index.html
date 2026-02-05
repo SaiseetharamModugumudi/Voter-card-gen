@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Voter ID Card Generator{% endblock %}
+
+{% block content %}
+<div class="hero-section mb-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-3">Voter ID Card Generator</h1>
+            <p class="lead mb-4">Create, manage, and display your digital Indian Voter ID card with ease. 
+            Store your voter information securely and generate a professional-looking ID card.</p>
+            <div class="d-flex gap-3">
+                <a href="{% url 'create_voter_card' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-plus"></i> Create New Card
+                </a>
+                <a href="{% url 'voter_cards_list' %}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-list"></i> View All Cards
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-6 text-center">
+            <div class="hero-image">
+                <i class="fas fa-id-card fa-10x text-primary opacity-25"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="row mb-5">
+    <div class="col-md-4">
+        <div class="card stat-card text-center">
+            <div class="card-body">
+                <i class="fas fa-id-card fa-3x text-primary mb-3"></i>
+                <h3 class="card-title fw-bold">{{ voter_cards_count }}</h3>
+                <p class="card-text text-muted">Total Voter Cards Created</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card text-center">
+            <div class="card-body">
+                <i class="fas fa-shield fa-3x text-success mb-3"></i>
+                <h3 class="card-title fw-bold">Secure</h3>
+                <p class="card-text text-muted">Data Stored Safely</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card text-center">
+            <div class="card-body">
+                <i class="fas fa-mobile-alt fa-3x text-info mb-3"></i>
+                <h3 class="card-title fw-bold">Responsive</h3>
+                <p class="card-text text-muted">Works on All Devices</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section">
+    <h2 class="text-center mb-5 fw-bold">Why Choose Us?</h2>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="feature-box p-4">
+                <i class="fas fa-check-circle text-success fa-2x mb-3"></i>
+                <h5 class="fw-bold">Easy to Use</h5>
+                <p class="text-muted">Simple form to create and manage voter cards with an intuitive interface.</p>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="feature-box p-4">
+                <i class="fas fa-image text-primary fa-2x mb-3"></i>
+                <h5 class="fw-bold">Photo Upload</h5>
+                <p class="text-muted">Upload your photo and see it appear on your digital voter ID card.</p>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="feature-box p-4">
+                <i class="fas fa-edit text-info fa-2x mb-3"></i>
+                <h5 class="fw-bold">Edit Anytime</h5>
+                <p class="text-muted">Update your voter card details at any time with just a few clicks.</p>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="feature-box p-4">
+                <i class="fas fa-search text-warning fa-2x mb-3"></i>
+                <h5 class="fw-bold">Quick Search</h5>
+                <p class="text-muted">Search voter cards by name, voter ID, or father's name instantly.</p>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="feature-box p-4">
+                <i class="fas fa-print text-secondary fa-2x mb-3"></i>
+                <h5 class="fw-bold">Print Ready</h5>
+                <p class="text-muted">Print your voter card in a format that looks like the official ID card.</p>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="feature-box p-4">
+                <i class="fas fa-lock text-danger fa-2x mb-3"></i>
+                <h5 class="fw-bold">Secure & Private</h5>
+                <p class="text-muted">Your personal information is stored securely in our database.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="cta-section bg-gradient text-white text-center py-5 mt-5 rounded-3">
+    <h2 class="fw-bold mb-3">Ready to Create Your Voter ID Card?</h2>
+    <p class="lead mb-4">Get started in just a few minutes. Fill in your details and see your ID card.</p>
+    <a href="{% url 'create_voter_card' %}" class="btn btn-light btn-lg">
+        <i class="fas fa-arrow-right"></i> Get Started Now
+    </a>
+</div>
+{% endblock %}

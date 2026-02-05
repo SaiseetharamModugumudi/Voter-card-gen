@@ -1,0 +1,394 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Voter ID Card - {{ voter_card.first_name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .voter-id-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        max-width: 500px;
+        margin: 0 auto;
+        aspect-ratio: 3.5/2.2;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .voter-id-front {
+        flex: 1;
+        padding: 20px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .voter-id-front::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+        background-size: 50px 50px;
+    }
+
+    .voter-id-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .voter-id-header-left h5 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: bold;
+        letter-spacing: 2px;
+    }
+
+    .voter-id-header-right {
+        text-align: right;
+    }
+
+    .voter-id-header-right .ashoka-chakra {
+        font-size: 30px;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 5px;
+    }
+
+    .voter-id-content {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 15px;
+        position: relative;
+        z-index: 1;
+        flex-grow: 1;
+    }
+
+    .voter-id-photo {
+        grid-row: 1 / 4;
+    }
+
+    .voter-id-photo img {
+        width: 120px;
+        height: 140px;
+        object-fit: cover;
+        border: 3px solid white;
+        border-radius: 5px;
+    }
+
+    .voter-id-info-field {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .voter-id-info-label {
+        font-size: 9px;
+        font-weight: bold;
+        opacity: 0.8;
+        letter-spacing: 0.5px;
+        margin-bottom: 2px;
+    }
+
+    .voter-id-info-value {
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .voter-id-footer {
+        position: relative;
+        z-index: 1;
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        padding-top: 10px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 10px;
+    }
+
+    .voter-id-footer-left {
+        text-align: left;
+    }
+
+    .voter-id-footer-right {
+        text-align: right;
+    }
+
+    .voter-id-footer-item {
+        line-height: 1.2;
+        opacity: 0.9;
+    }
+
+    .voter-id-footer-item strong {
+        display: block;
+        font-size: 11px;
+    }
+
+    .action-buttons {
+        margin-top: 30px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .print-btn, .edit-btn, .back-btn, .delete-btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .print-btn {
+        background: #28a745;
+        color: white;
+    }
+
+    .print-btn:hover {
+        background: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    }
+
+    .edit-btn {
+        background: #007bff;
+        color: white;
+    }
+
+    .edit-btn:hover {
+        background: #0056b3;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+    }
+
+    .back-btn {
+        background: #6c757d;
+        color: white;
+    }
+
+    .back-btn:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+
+    .delete-btn {
+        background: #dc3545;
+        color: white;
+    }
+
+    .delete-btn:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+    }
+
+    @media print {
+        body > *:not(.voter-id-container) {
+            display: none;
+        }
+
+        .voter-id-container {
+            padding: 0;
+        }
+
+        .action-buttons {
+            display: none;
+        }
+
+        .voter-id-card {
+            box-shadow: none;
+            margin: 0;
+        }
+    }
+
+    .voter-id-container {
+        padding: 20px;
+    }
+
+    .info-panel {
+        background: #f8f9fa;
+        border-left: 4px solid #667eea;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 20px;
+    }
+
+    .info-panel h6 {
+        color: #667eea;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .info-panel ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .info-panel li {
+        padding: 5px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .info-panel li:last-child {
+        border-bottom: none;
+    }
+
+    .info-panel strong {
+        color: #333;
+        min-width: 150px;
+        display: inline-block;
+    }
+
+    @media (max-width: 768px) {
+        .voter-id-card {
+            aspect-ratio: auto;
+            max-width: 100%;
+        }
+
+        .voter-id-front {
+            padding: 15px;
+        }
+
+        .voter-id-content {
+            grid-template-columns: 80px 1fr;
+            gap: 10px;
+        }
+
+        .voter-id-photo img {
+            width: 80px;
+            height: 100px;
+        }
+
+        .voter-id-info-value {
+            font-size: 11px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .print-btn, .edit-btn, .back-btn, .delete-btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h2 class="fw-bold">
+        <i class="fas fa-id-card"></i> Voter ID Card
+    </h2>
+    <p class="text-muted">{{ voter_card.first_name }} {{ voter_card.father_name }}</p>
+</div>
+
+<div class="voter-id-container">
+    <div class="voter-id-card">
+        <div class="voter-id-front">
+            <div class="voter-id-header">
+                <div class="voter-id-header-left">
+                    <h5>ELECTOR'S PHOTO IDENTITY CARD</h5>
+                </div>
+                <div class="voter-id-header-right">
+                    <div class="ashoka-chakra">⭐</div>
+                    <small>INDIA</small>
+                </div>
+            </div>
+
+            <div class="voter-id-content">
+                <div class="voter-id-photo">
+                    {% if voter_card.photo %}
+                        <img src="{{ voter_card.photo.url }}" alt="Voter Photo">
+                    {% else %}
+                        <div style="width: 120px; height: 140px; background: #ddd; border: 3px solid white; border-radius: 5px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user fa-3x text-muted"></i>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="voter-id-info-field">
+                    <div class="voter-id-info-label">NAME</div>
+                    <div class="voter-id-info-value">{{ voter_card.first_name }}</div>
+                </div>
+
+                <div class="voter-id-info-field">
+                    <div class="voter-id-info-label">VOTER ID NO.</div>
+                    <div class="voter-id-info-value">{{ voter_card.voter_id_number }}</div>
+                </div>
+
+                <div class="voter-id-info-field">
+                    <div class="voter-id-info-label">DATE OF BIRTH</div>
+                    <div class="voter-id-info-value">{{ voter_card.date_of_birth|date:"d/m/Y" }}</div>
+                </div>
+            </div>
+
+            <div class="voter-id-footer">
+                <div class="voter-id-footer-left">
+                    <div class="voter-id-footer-item">
+                        <strong>STATE</strong>
+                        {{ voter_card.state }}
+                    </div>
+                </div>
+                <div class="voter-id-footer-right">
+                    <div class="voter-id-footer-item">
+                        <strong>SERIAL NO.</strong>
+                        {{ voter_card.serial_number }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Information Panel -->
+<div class="info-panel">
+    <h6><i class="fas fa-info-circle"></i> Complete Information</h6>
+    <ul>
+        <li><strong>First Name:</strong> {{ voter_card.first_name }}</li>
+        <li><strong>Father's Name:</strong> {{ voter_card.father_name }}</li>
+        <li><strong>Date of Birth:</strong> {{ voter_card.date_of_birth|date:"d M, Y" }}</li>
+        <li><strong>Age:</strong> {{ voter_card.get_age }} years</li>
+        <li><strong>Gender:</strong> {{ voter_card.gender }}</li>
+        <li><strong>State:</strong> {{ voter_card.state }}</li>
+        <li><strong>Voter ID Number:</strong> {{ voter_card.voter_id_number }}</li>
+        <li><strong>Serial Number:</strong> {{ voter_card.serial_number }}</li>
+        <li><strong>Address:</strong> {{ voter_card.address }}</li>
+        <li><strong>Created Date:</strong> {{ voter_card.created_at|date:"d M, Y H:i" }}</li>
+    </ul>
+</div>
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+    <button onclick="window.print()" class="print-btn">
+        <i class="fas fa-print"></i> Print Card
+    </button>
+    <a href="{% url 'edit_voter_card' voter_card.pk %}" class="edit-btn">
+        <i class="fas fa-edit"></i> Edit Card
+    </a>
+    <a href="{% url 'voter_cards_list' %}" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to List
+    </a>
+    <form method="post" action="{% url 'delete_voter_card' voter_card.pk %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this voter card?');">
+        {% csrf_token %}
+        <button type="submit" class="delete-btn">
+            <i class="fas fa-trash"></i> Delete Card
+        </button>
+    </form>
+</div>
+{% endblock %}
